@@ -1,10 +1,15 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import Listing from '@/components/Listing.vue';
 import { Head } from '@inertiajs/vue3';
-import { defineProps, onMounted } from 'vue';
+import { Link } from '@inertiajs/vue3';
+import { defineProps } from 'vue';
+import { useForm } from '@inertiajs/vue3'
 
 const props = defineProps(['listings']);
+
+const form = useForm({
+    id: props.listings.id,
+})
 
 </script>
 
@@ -21,6 +26,7 @@ const props = defineProps(['listings']);
                 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div class="flex justify-between bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6 text-gray-900">Here are your posted items, {{ $page.props.auth.user.name }}!</div>
+                        
                     </div>
                 </div>
             </div>
@@ -46,6 +52,9 @@ const props = defineProps(['listings']);
                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                   <div class="font-semibold text-left">quantity</div>
                                 </th>
+                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                  <div class="font-semibold text-left pl-20">Action</div>
+                                </th>
                               </tr>
                             </thead>
                     
@@ -68,6 +77,14 @@ const props = defineProps(['listings']);
                               </td>
                               <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-left">{{ listing.quantity }}</div>
+                              </td>
+                              <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <button class="p-6 text-blue-500 hover:text-blue-600 hover:underline">
+                                  <Link :href="`/edit/listing/${listing.id}`">Update</Link>
+                                </button>
+                                <button class="p-6 text-red-500 hover:text-red-600 hover:underline">
+                                  <button @click="form.delete(`/listing/${listing.id}`)">Delete</button>
+                                </button>
                               </td>
                               
                             </tr>

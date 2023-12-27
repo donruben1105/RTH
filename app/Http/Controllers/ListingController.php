@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Listing;
-use App\Providers\RouteServiceProvider;
 use Inertia\Inertia;
+use App\Models\Listing;
 use Illuminate\Http\Request;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Requests\ListingUpdateRequest;
 
 class ListingController extends Controller
 {   
-    public function index()
-    {
+    public function index() {
         return Inertia::render('User/AllListing', [
           'listings' => Listing::latest()->get(),
         ]);
@@ -39,4 +40,36 @@ class ListingController extends Controller
 
         return back();
     }
+
+    public function edit(Listing $listings) {
+        return Inertia::render('User/UpdateListing', [
+            'listings' => $listings,
+        ]);
+    }
+    
+    public function update(Request $request) {
+
+        $listing = Listing::findOrFail($request->id);
+
+        if (!$listing) return back()->with('message', 'Something went wrong');
+        
+
+        $formFields = $request->validate([
+            'name' => '',
+            'price' => '',
+            'size' => '',
+            'quantity' => '',
+        ]);
+        $listing->update($formFields);
+    
+        return to_route('listing.index')->with('success', 'Listing updated successfully.');
+    }
+
+    public function destroy($id) {
+        $listing = Listing::findOrFail($id);
+        $listing->delete();
+
+        return to_route('listing.index')->with('success', 'Listing deleted successfully.');
+    }
+    
 }

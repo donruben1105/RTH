@@ -31,7 +31,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/listing', function () {
-    return Inertia::render('User/Listing');
+    return Inertia::render('Listing');
 })->middleware(['auth', 'verified'])->name('listing');
 
 
@@ -41,6 +41,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/get/listing', [ListingController::class, 'index'])->name('listing.index');
     Route::post('/listing', [ListingController::class, 'store'])->name('listing.store');
+    Route::get('/edit/listing/{listings}', [ListingController::class, 'edit'])->name('listing.edit');
+    Route::put('/listing/{listings}', [ListingController::class, 'update'])->name('listing.update');
+    Route::delete('/listing/{listings}', [ListingController::class, 'destroy'])->name('listing.destroy');
 });
 
 require __DIR__.'/auth.php';
