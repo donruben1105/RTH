@@ -1,6 +1,7 @@
 <script setup>
 import { reactive } from 'vue'
 import { router } from '@inertiajs/vue3'
+import Swal from 'sweetalert2'
 
 
 const form = reactive({
@@ -17,9 +18,34 @@ const resetForm = () => {
     form.quantity = null
 }
 
+const configureSwal = () => {
+    return Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        },
+    });
+};
+
 function submit() {
-  router.post('/listing', form)
-  resetForm();
+    router.post('/listing', form, {
+        onSuccess: () => {
+            // Reset the form fields
+            resetForm();
+
+            // Show success Toast
+            const Toast = configureSwal();
+            Toast.fire({
+                icon: 'success',
+                title: 'Listing submitted successfully',
+            });
+        },
+    });
 }
 </script>
 <template>

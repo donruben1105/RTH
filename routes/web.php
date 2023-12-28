@@ -21,10 +21,15 @@ Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
     ]);
+})->name('welcome');
+
+Route::get('/all/listing', function () {
+    [ListingController::class, 'listing'];
 });
+
+
+Route::get('/all/listing', [ListingController::class, 'listing'])->name('listing.listing');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

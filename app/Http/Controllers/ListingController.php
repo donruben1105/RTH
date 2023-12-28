@@ -16,6 +16,13 @@ class ListingController extends Controller
           'listings' => Listing::latest()->get(),
         ]);
     }
+
+    public function listing() {
+        return Inertia::render('HomeListing', [
+          'welcomeListings' => Listing::all(),
+        ]);
+    }
+    
     
 
     public function show(Listing $listing) {

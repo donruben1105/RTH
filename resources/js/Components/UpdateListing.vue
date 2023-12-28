@@ -1,25 +1,55 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3'
-import { defineProps } from 'vue'
+import Swal from 'sweetalert2'
+
 
 let props = defineProps({
     listings: Object,
 })
 
 const form = useForm({
-    id: props.listings.id,
-    name: props.listings.name,
-    price: props.listings.price,
-    size: props.listings.size,
-    quantity: props.listings.quantity
-})
+  id: props.listings.id,
+  name: props.listings.name,
+  price: props.listings.price,
+  size: props.listings.size,
+  quantity: props.listings.quantity
+});
 
+const configureSwal = (icon, title) => {
+  return Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    icon,
+    title,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
+};
+
+const submit = () => {
+  form.put(`/listing/${props.listings.id}`, {
+        onSuccess: () => {
+
+            // Show success Toast
+            const Toast = configureSwal();
+            Toast.fire({
+                icon: 'success',
+                title: 'Listing updatetd successfully',
+            });
+        },
+    });
+};
 </script>
 <template>
     <div class="flex">
         <div class="bg-white p-12 lg:mx-auto lg:max-w-full rounded-lg">
             <div class="overflow-hidden shadow-sm sm:rounded-lg">
-                <form @submit.prevent="form.put(`/listing/${listings.id}`)">
+                <form @submit.prevent="submit">
                     
                     <div class="space-y-4 md:flex md:space-x-4 md:space-y-0">
                         <div class="flex-1">

@@ -1,4 +1,5 @@
 <script setup>
+import Swal from 'sweetalert2'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { Link } from '@inertiajs/vue3';
@@ -10,6 +11,34 @@ const props = defineProps(['listings']);
 const form = useForm({
     id: props.listings.id,
 })
+
+
+
+const deleteListing = (id) => {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: 'You won\'t be able to revert this!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // User confirmed, proceed with deletion
+      form.delete(`/listing/${id}`, {
+        onSuccess: () => {
+          // Show success Toast
+          Swal.fire({
+            title: 'Deleted!',
+            text: 'Your file has been deleted.',
+            icon: 'success',
+          });
+        },
+      });
+    }
+  });
+};
 
 </script>
 
@@ -83,7 +112,7 @@ const form = useForm({
                                   <Link :href="`/edit/listing/${listing.id}`">Update</Link>
                                 </button>
                                 <button class="p-6 text-red-500 hover:text-red-600 hover:underline">
-                                  <button @click="form.delete(`/listing/${listing.id}`)">Delete</button>
+                                  <button @click="deleteListing(listing.id)">Delete</button>
                                 </button>
                               </td>
                               

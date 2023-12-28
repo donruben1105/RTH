@@ -5,6 +5,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import Swal from 'sweetalert2'
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 defineProps({
@@ -22,11 +23,36 @@ const form = useForm({
     remember: false,
 });
 
-const submit = () => {
-    form.post(route('login'), {
-        onFinish: () => form.reset('password'),
+const configureSwal = () => {
+    return Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        },
     });
 };
+
+const submit = () => {
+        const response = form.post(route('login'), {
+            onSuccess: () => {
+                // Reset the password field
+                form.reset('password');
+
+                // Show success Toast
+                const Toast = configureSwal();
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Signed in successfully',
+                });
+            },
+        });
+};
+
 </script>
 
 <template>
@@ -84,6 +110,12 @@ const submit = () => {
                 >
                     Forgot your password?
                 </Link>
+
+                <Link
+                    :href="route('register')"
+                    class="ms-4 inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
+                    >Register</Link
+                >
 
                 <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Log in
