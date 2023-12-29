@@ -17,19 +17,20 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
+Route::get('/welcome', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
     ]);
 })->name('welcome');
 
-Route::get('/all/listing', function () {
-    [ListingController::class, 'listing'];
-});
+// Route::get('/all/listing', function () {
+//     [ListingController::class, 'listing'];
+// });
 
 
-Route::get('/all/listing', [ListingController::class, 'listing'])->name('listing.listing');
+Route::get('/', [ListingController::class, 'listing'])->name('listing.listing');
+Route::get('/single/listing/{id}', [ListingController::class, 'singleListing'])->name('listing.singleListing');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

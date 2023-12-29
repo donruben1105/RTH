@@ -5,7 +5,6 @@ import { Head, Link } from '@inertiajs/vue3';
 const props = defineProps({
     welcomeListings: Array
 })
-console.log(props)
 </script>
 
 <template>
@@ -26,22 +25,23 @@ console.log(props)
                 <img src="../../img/HERO.png" alt="" class="w-4/6">
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 lg:gap-8">
+            <div class="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-6 lg:gap-8">
                 <div v-for="welcomeListing in props.welcomeListings" :key="welcomeListing.id">
                     <div class="mt-10">
-                        
-                            <div
-                                class="p-6 bg-white dark:bg-gray-800/50 dark:bg-gradient-to-bl from-gray-700/50 via-transparent dark:ring-1 dark:ring-inset dark:ring-white/5 rounded-lg shadow-2xl shadow-gray-500/20 dark:shadow-none transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500"
-                            >
-                                <div class="text-center">
-                                    <h2 class="text-xl item font-semibold text-gray-900 dark:text-white">Name: {{ welcomeListing.name}}</h2>
-                                    <h2 class="text-xl item font-semibold text-gray-900 dark:text-white">Price: {{ welcomeListing.price}}</h2>
-                                    <h2 class="text-xl item font-semibold text-gray-900 dark:text-white">Size: {{ welcomeListing.size}}</h2>
-                                    <h2 class="text-xl item font-semibold text-gray-900 dark:text-white">Quantity: {{ welcomeListing.quantity}}</h2>
-                                </div>
+                        <div
+                            class="p-6 bg-white dark:bg-gray-800/50 dark:bg-gradient-to-bl from-gray-700/50 via-transparent dark:ring-1 dark:ring-inset dark:ring-white/5 rounded-lg shadow-2xl shadow-gray-500/20 dark:shadow-none transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500"
+                        >
+                            <div class="text-center">
+                                <img :src="welcomeListing.files" alt="Listing Image" class="mb-4 w-full h-full object-fit rounded-lg">
+                                <h2 class="text-xl item font-semibold text-gray-900 dark:text-white">Name: {{ welcomeListing.name }}</h2>
+                                <h2 class="text-xl item font-semibold text-gray-900 dark:text-white">Price: {{ welcomeListing.price }}</h2>
+                                <h2 class="text-xl item font-semibold text-gray-900 dark:text-white">Size: {{ welcomeListing.size }}</h2>
+                                <h2 class="mb-4 text-xl item font-semibold text-gray-900 dark:text-white">Quantity: {{ welcomeListing.quantity }}</h2>
+                                <Link :href="`/single/listing/${welcomeListing.id}`">
+                                    <button class="transition ease-in-out delay-150 hover:-translate-y-1 text-xl font-semibold text-gray-900 dark:text-white border p-2 rounded-lg border-blue-500 hover:bg-blue-500 hover:text-white">Buy Now</button>
+                                </Link>
                             </div>
-        
-                        
+                        </div>
                     </div>
                 </div>
             </div>
