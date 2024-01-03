@@ -1,10 +1,11 @@
 <?php
 
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\ListingController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +51,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/edit/listing/{listings}', [ListingController::class, 'edit'])->name('listing.edit');
     Route::put('/listing/{listings}', [ListingController::class, 'update'])->name('listing.update');
     Route::delete('/listing/{listings}', [ListingController::class, 'destroy'])->name('listing.destroy');
+});
+
+Route::get('/run-migration', function(){
+    Artisan::call('optimize:clear');
+    Artisan::call('migrate:refresh');
+
+    return "Migration executed successfully.";
 });
 
 require __DIR__.'/auth.php';
